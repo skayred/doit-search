@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mysql2'
 require 'json'
 
+set :environment, :production
 set :bind, '0.0.0.0'
 
 Mysqlclient = Mysql2::Client.new(host: 'mysql',
