@@ -35,7 +35,8 @@ ON descr.entity_id = data.nid
 WHERE MATCH(field_short_description_value) AGAINST('#{term}')
   OR MATCH(field_instructions_value) AGAINST('#{term}')
   OR MATCH(body_value) AGAINST('#{term}')
-  OR MATCH(field_tags_value) AGAINST('#{term}');", :as => :hash).to_a
+  OR MATCH(field_tags_value) AGAINST('#{term}')
+  OR MATCH(title) AGAINST('#{term}');", :as => :hash).to_a
 end
 
 get '/' do
