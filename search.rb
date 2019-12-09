@@ -8,7 +8,8 @@ set :bind, '0.0.0.0'
 Mysqlclient = Mysql2::Client.new(host: 'mysql',
                                  username: ENV['user'],
                                  password: ENV['pwd'],
-                                 database: ENV['db'])
+                                 database: ENV['db'],
+                                 reconnect: true)
 
 def full_text_search(term)
   Mysqlclient.query("SELECT 
@@ -32,11 +33,11 @@ ON descr.entity_id = paths.entity_id
 LEFT JOIN 
   node_field_data AS data
 ON descr.entity_id = data.nid
-WHERE MATCH(field_short_description_value) AGAINST('#{term}')
-  OR MATCH(field_instructions_value) AGAINST('#{term}')
-  OR MATCH(body_value) AGAINST('#{term}')
-  OR MATCH(field_tags_value) AGAINST('#{term}')
-  OR MATCH(title) AGAINST('#{term}');", :as => :hash).to_a
+WHERE MATCH(field_short_description_value) AGAINST('#{term}*' IN BOOLEAN MODE)
+  OR MATCH(field_instructions_value) AGAINST('#{term}*' IN BOOLEAN MODE)
+  OR MATCH(body_value) AGAINST('#{term}*' IN BOOLEAN MODE)
+  OR MATCH(field_tags_value) AGAINST('#{term}*' IN BOOLEAN MODE)
+  OR MATCH(title) AGAINST('#{term}*' IN BOOLEAN MODE);", :as => :hash).to_a
 end
 
 get '/' do
