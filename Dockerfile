@@ -11,4 +11,5 @@ RUN bundle install --system
 
 EXPOSE 4567
 
+HEALTHCHECK CMD curl --fail http://localhost:4567?term=project || exit 1
 CMD ["ruby", "search.rb"]
